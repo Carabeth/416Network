@@ -3,12 +3,12 @@ import java.util.*;
 public class StudentServerStrategy implements ServerStrategy{
     List<String> file;
 	boolean[] acks;
-	boolean slowStart;
-	boolean congestionAvoidance;
-	boolean timeout;
-	boolean fastRetransmit;
-	int cwnd;
-	int ssthresh;
+	boolean slowStart = true;
+	boolean congestionAvoidance = false;
+	boolean timeout = false;
+	boolean fastRetransmit = false;
+	int cwnd = 1;
+	int ssthresh = 8;
 	
 
     public StudentServerStrategy(){
@@ -17,20 +17,20 @@ public class StudentServerStrategy implements ServerStrategy{
 
     public void setFile(List<String> file){
         this.file = file;
+		acks = new boolean[file.size()];
     }
 
-    public void reset(){
+    public void reset() {
+		ssthresh = cwnd/2;
 		if (fastRetransmit == true) {
 			cwnd = cwnd/2;
-			ssthresh = ssthresh/2;
-			slowStart = true;
-			congestionAvoidance = false;
+			slowStart = false;
+			congestionAvoidance = true;
 			fastRetransmit = false;
 			timeout = false;
 		}
 		else if (timeout == true) {
 			cwnd = 1;
-			ssthresh = ssthresh/2;
 			slowStart = true;
 			congestionAvoidance = false;
 			fastRetransmit = false;
