@@ -21,22 +21,8 @@ public class StudentServerStrategy implements ServerStrategy{
     }
 
     public void reset() {
-		ssthresh = cwnd/2;
-		if (fastRetransmit == true) {
-			cwnd = cwnd/2;
-			slowStart = false;
-			congestionAvoidance = true;
-			fastRetransmit = false;
-			timeout = false;
-		}
-		else if (timeout == true) {
-			cwnd = 1;
-			slowStart = true;
-			congestionAvoidance = false;
-			fastRetransmit = false;
-			timeout = false;
-		}
-
+		
+		
     }
 
     public List<Message> sendRcv(List<Message> clientMsgs){
@@ -48,11 +34,50 @@ public class StudentServerStrategy implements ServerStrategy{
 		
 		List<Message> msgs = new ArrayList<Message>();
 		
-		while (firstUnACKed < acks.length && acks[firstUnACKed]) ++firstUnACKed;
-		
-		if(firstUnACKed < acks.length) {
-			msgs.add(new Message(firstUnACKed,file.get(firstUnACKed)));
+		//Sends the number of packets depending on the congestion window
+		while (firstUnACKed < acks.length && acks[firstUnACKed]) {
+			for (int i = 0; i < cwnd; ++i) {
+				if(firstUnACKed < acks.length) {
+					msgs.add(new Message(firstUnACKed,file.get(firstUnACKed)));
+				}
+				firstUnACKed++;
+			}
 		}
+		
+		//Determines slowStart or congestion avoidance depending on threshold and congestion window
+		if (cwnd >= ssthresh) {
+			slowStart = false;
+			congestionAvoidance = true;
+		}
+		else {
+			slowStart = true;
+			congestionAvoidance = false;
+		}
+		
+		//Determines if timeout occured and how to handle it
+		if (fastRetransmit) {
+			slowStart = true;
+			congestionAvoidance = true;
+			ssthresh = cwnd/2;
+			cwnd /= 2;
+		}
+		else if (timeout) {
+			slowStart = true;
+			congestionAvoidance = false;
+			ssthresh = cwnd/2;
+			cwnd = 1;
+		}
+		
+		//No timeout which means update cwnd
+		else {
+			if (slowStart) {
+				cwnd *= 2;
+			}
+			else {
+				cwnd += 1;
+			}
+		}
+		
 		return msgs;
     }
     
