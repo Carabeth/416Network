@@ -76,7 +76,6 @@ public class StudentServerStrategy implements ServerStrategy{
 			ssthresh = cwnd/2;
 			cwnd /= 2;
 			fastRetransmit = false;
-			timeout = false;
 		}
 		
 		//No timeout which means update cwnd
