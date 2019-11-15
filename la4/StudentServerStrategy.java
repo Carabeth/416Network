@@ -28,6 +28,8 @@ public class StudentServerStrategy implements ServerStrategy{
     }
 
     public List<Message> sendRcv(List<Message> clientMsgs){
+		
+		//Recieves client acks
 		for (Message m: clientMsgs) {
 			acks[m.num-1] = true;
 			System.out.println(m.num+","+m.msg);
@@ -46,6 +48,7 @@ public class StudentServerStrategy implements ServerStrategy{
 			checkForDuplicateAck = m.num;
 		}
 		
+		//Creates list of messages to send to client
 		List<Message> msgs = new ArrayList<Message>();
 		
 		//Sends the number of packets depending on the congestion window
@@ -69,7 +72,7 @@ public class StudentServerStrategy implements ServerStrategy{
 		
 		//Determines if timeout occured and how to handle it
 		if (fastRetransmit) {
-			System.out.println("Triple Duplicate ACK detected");
+			System.out.println("Triple Duplicate ACK detected -> timeout");
 			msgs.add(new Message(checkForDuplicateAck,file.get(checkForDuplicateAck)));
 			slowStart = false;
 			congestionAvoidance = true;
