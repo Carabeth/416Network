@@ -34,14 +34,14 @@ public class StudentServerStrategy implements ServerStrategy{
 		
 		List<Message> msgs = new ArrayList<Message>();
 		
+		System.out.println(cwnd);
 		//Sends the number of packets depending on the congestion window
-		while (firstUnACKed < acks.length && acks[firstUnACKed]) {
-			for (int i = 0; i < cwnd; ++i) {
-				if(firstUnACKed < acks.length) {
-					msgs.add(new Message(firstUnACKed,file.get(firstUnACKed)));
-				}
-				firstUnACKed++;
+		for (int i = 0; i < cwnd; ++i) {
+			if(firstUnACKed < acks.length && acks[firstUnACKed] == false) {
+				msgs.add(new Message(firstUnACKed,file.get(firstUnACKed)));
+				acks[firstUnACKed] = true;
 			}
+			firstUnACKed++;
 		}
 		
 		//Determines slowStart or congestion avoidance depending on threshold and congestion window
