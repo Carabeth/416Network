@@ -5,11 +5,12 @@ public class StudentServerStrategy implements ServerStrategy{
 	boolean[] acks;
 	boolean slowStart = true;
 	boolean congestionAvoidance = false;
-	boolean timeout = false;
 	boolean fastRetransmit = false;
 	int cwnd = 1;
 	int ssthresh = 8;
 	int firstUnACKed = 0;
+	int checkForDuplicateAck = 0;
+	int counter = 1;
 	
 
     public StudentServerStrategy(){
@@ -30,6 +31,19 @@ public class StudentServerStrategy implements ServerStrategy{
 		for (Message m: clientMsgs) {
 			acks[m.num-1] = true;
 			System.out.println(m.num+","+m.msg);
+			
+			//Checks for triple duplicate ACK
+			if (checkForDuplicateAck == m.num) {
+				++counter;
+			}
+			else {
+				counter = 1;
+			}
+			if (counter == 3) {
+				fastRetransmit = true;
+				counter = 1;
+			}
+			checkForDuplicateAck = m.num;
 		}
 		
 		List<Message> msgs = new ArrayList<Message>();
@@ -55,16 +69,14 @@ public class StudentServerStrategy implements ServerStrategy{
 		
 		//Determines if timeout occured and how to handle it
 		if (fastRetransmit) {
+			System.out.println("Triple Duplicate ACK detected");
+			msgs.add(new Message(checkForDuplicateAck,file.get(checkForDuplicateAck)));
 			slowStart = false;
 			congestionAvoidance = true;
 			ssthresh = cwnd/2;
 			cwnd /= 2;
-		}
-		else if (timeout) {
-			slowStart = true;
-			congestionAvoidance = false;
-			ssthresh = cwnd/2;
-			cwnd = 1;
+			fastRetransmit = false;
+			timeout = false;
 		}
 		
 		//No timeout which means update cwnd
