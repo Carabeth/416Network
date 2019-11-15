@@ -27,19 +27,19 @@ public class StudentServerStrategy implements ServerStrategy{
     public List<Message> sendRcv(List<Message> clientMsgs){
 
     	for(Message m: clientMsgs){
-            acks[m.num] = true;
+            acks[m.num-1] = true;
             System.out.println(m.num+","+m.msg);
         }
         List<Message> msgs = new ArrayList<Message>();
         //change the while loop to increase run times
-	for(int i = last; i < acks.length; i++)
+	/*for(int i = last; i < acks.length; i++)
 	{
 		if(acks[i]!=true)
 		{
 			last = i;
 			break;
 		}
-	} 
+	} */
         int size =0;
         for (int i = last; i < acks.length && size != cwind; i++)
         {
