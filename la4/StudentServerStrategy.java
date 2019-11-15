@@ -9,6 +9,7 @@ public class StudentServerStrategy implements ServerStrategy{
 	boolean fastRetransmit = false;
 	int cwnd = 1;
 	int ssthresh = 8;
+	int firstUnACKed = 0;
 	
 
     public StudentServerStrategy(){
@@ -30,11 +31,9 @@ public class StudentServerStrategy implements ServerStrategy{
 			acks[m.num-1] = true;
 			System.out.println(m.num+","+m.msg);
 		}
-		int firstUnACKed = 0;
 		
 		List<Message> msgs = new ArrayList<Message>();
 		
-		System.out.println(cwnd);
 		//Sends the number of packets depending on the congestion window
 		for (int i = 0; i < cwnd; ++i) {
 			if(firstUnACKed < acks.length && acks[firstUnACKed] == false) {
@@ -56,7 +55,7 @@ public class StudentServerStrategy implements ServerStrategy{
 		
 		//Determines if timeout occured and how to handle it
 		if (fastRetransmit) {
-			slowStart = true;
+			slowStart = false;
 			congestionAvoidance = true;
 			ssthresh = cwnd/2;
 			cwnd /= 2;
