@@ -22,15 +22,15 @@ class lsrouter {
 		revisions.input("net1_changes.txt");
 		msgs.input("net1_messages.txt");
 		int V = networks.size;
-		int E = network.topology.size();
+		int E = networks.network.size();
 		int[][] mappings = new int [V][V];
 		String[][] jumps = new String [V][V];
 		Graph routingNetwork = createNetwork(networks,E,V,mappings,jumps);
 		result += routerTable(mappings, V, jumps);
-		result += sendingMsg(jumps, messages);
+		result += sendingMsg(jumps, msgs);
 		
 		
-		for (int i = 0; i < revisions.topology.size(); i = i + 2) {
+		for (int i = 0; i < revisions.network.size(); i = i + 2) {
 			
 			boolean notLocated = true;
 			
@@ -55,11 +55,11 @@ class lsrouter {
 				networks.network.add(revisions.network.get(i));
 				networks.network.add(revisions.network.get(i));
 				
-				E = networks.network.size()
+				E = networks.network.size();
 				routingNetwork = createNetwork(networks,E,V,mappings,jumps);
 			}
 			
-			result += routingTable(mappings, V, jumps);
+			result += routerTable(mappings, V, jumps);
 			
 			result += sendingMsg(jumps, msgs);
 		}
@@ -116,7 +116,7 @@ public static String routerTable(int [][] table, int V, String [][]hops){
 				ret += (i+1) +" "+(j+1)+" "+table[i][j]+"\n";
 			}
 			else {
-				ret += (i+1) +" "+ hops[i][j].substring(0,1)+" "table[i][j]+"\n";
+				ret += (i+1) +" "+ hops[i][j].substring(0,1)+" "+table[i][j]+"\n";
 			}
 		} 
 	}
@@ -137,7 +137,7 @@ public static void printTable(int [][]table, int V){
 
 }
 
-public static String sendingMsg(String [][]hops, Message m){
+public static String sendingMsg(String [][]hops, Messages m){
 
 	String ret = "";
 	for(int i = 0; i < m.messages.size(); ++i){
