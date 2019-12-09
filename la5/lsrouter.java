@@ -52,8 +52,8 @@ class lsrouter {
 			}
 			
 			if(notLocated == true) {
-				networks.network.add(revisions.topology.get(i));
-				networks.network.add(revisions.topology.get(i));
+				networks.network.add(revisions.network.get(i));
+				networks.network.add(revisions.network.get(i));
 				
 				E = networks.network.size()
 				routingNetwork = createNetwork(networks,E,V,mappings,jumps);
