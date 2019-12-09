@@ -22,7 +22,7 @@ public class Input {
 	}
 
 	//input
-	public void(String Name) {
+	public void input(String Name) {
 		try{
 			Name nodes = new Name(File);
 			Scanner scan = new Scanner(nodes);
