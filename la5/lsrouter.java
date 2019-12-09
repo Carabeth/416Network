@@ -67,6 +67,21 @@ class lsrouter {
 		Output(result);
 		
 	}
+	
+	//Graphing function
+	public static Graph createNetwork(Input networks, int E, int V, int[][] table, String [][] hops) {
+		Graph rNetwork = new Graph(V,E);
+		hopsClear(hops, V);
+		for (int i = 0; i < networks.network.size(); i++) {
+			rNetwork.edge[i].src = networks.network.get(i).link[0];
+			rNetwork.edge[i].dest = networks.network.get(i).link[1];
+			rNetwork.edge[i].weight = networks.network.get(i).link[2];
+		}
+		for (int i = 0; i < V; i++) {
+			table[i] = BellmanFord(rNetwork,hops,i);
+		}
+		return rNetwork;
+	}
 
 
 	// Shortest Distance from source to other nodes
