@@ -36,15 +36,15 @@ class lsrouter {
 			
 			for (int j = 0; j < E; ++j) {
 				
-				if (revisions.topology.get(i).link[0] == networks.topology.get(j).link[0] && revisions.topology.get(i).link[1] == networks.topology.get(j).link[0]) {
+				if (revisions.network.get(i).link[0] == networks.network.get(j).link[0] && revisions.network.get(i).link[1] == networks.network.get(j).link[0]) {
 					
-					networks.topology.get(j).link[2] = revisions.topology.get(i).link[2];
+					networks.network.get(j).link[2] = revisions.network.get(i).link[2];
 					
 					for (int k = 0; k < E; ++k) {
 						
-						if (revisions.topology.get(i).link[0] == networks.topology.get(k).link[1] && revisions.topology.get(i).link[1] == networks.topology.get(k).link[0] ) {
+						if (revisions.network.get(i).link[0] == networks.network.get(k).link[1] && revisions.network.get(i).link[1] == networks.network.get(k).link[0] ) {
 							
-							networks.topology.get(k).link[2] = changes.topology.get(i).link[2];
+							networks.network.get(k).link[2] = revisions.network.get(i).link[2];
 							notLocated = false;
 						}
 					}
@@ -52,10 +52,10 @@ class lsrouter {
 			}
 			
 			if(notLocated == true) {
-				networks.topology.add(changes.topology.get(i));
-				networks.topology.add(changes.topology.get(i));
+				networks.network.add(revisions.topology.get(i));
+				networks.network.add(revisions.topology.get(i));
 				
-				E = networks.topology.size()
+				E = networks.network.size()
 				routingNetwork = createNetwork(networks,E,V,mappings,jumps);
 			}
 			
