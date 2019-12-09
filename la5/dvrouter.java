@@ -67,7 +67,7 @@ class dvrouter {
 
 		// check for any cycles with negative weight.
 
-		for ( int j = 0; j < E; ++j) {
+		for (int j = 0; j < E; ++j) {
 			int u = graph.edge[j].source;
 			int v = graph.edge[j].destination;
 
