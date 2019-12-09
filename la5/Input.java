@@ -11,7 +11,7 @@ public class Input {
 	public class Network{
 		public int[] link;
 		public Network(int a, int b, int c){
-			link = new int {a,b,c};
+			link = new int [] {a,b,c};
 		}
 	}
 	public int size;

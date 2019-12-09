@@ -1,0 +1,1 @@
+Carrie Adkins and Tyler Barrett worked as partners for lab assignment 5. Carrie focused on the lsrouter class while Tyler worked on the dvrouter class. Both contribured for the additional files and classes for the implementation of the 2 algorithms.

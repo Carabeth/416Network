@@ -16,7 +16,7 @@ public class dvrouter {
 	private int Vert;
 	List<List<Node> > adj;
 
-	public lsrouter(int Vert) {
+	public dvrouter(int Vert) {
 		this.Vert = Vert;
 		distance = new int[Vert];
 		settled = new HashSet<Integer>();
@@ -25,7 +25,7 @@ public class dvrouter {
 
 	//Dijkastra's Algorithm
 
-	public void dijkstra(List<List<Node > adj, int src) {
+	public void dijkstra(List<List<Node >> adj, int src) {
 
 		this.adj = adj;
 
@@ -94,7 +94,7 @@ public class dvrouter {
 	// Node in graph
 
 	class Node implements Comparator<Node> {
-		public in node;
+		public int node;
 		public int cost;
 
 		public Node(){

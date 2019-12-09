@@ -37,7 +37,7 @@ public void input(String Name) {
 			char c2 = line.charAt(2);
 			String message = line.substring(4);
 			int i = Character.getNumericalValue(c1 - 1);
-			int 0 = Characte.getNumericalValue(c2 - 1);
+			int o = Characte.getNumericalValue(c2 - 1);
 			Message c = new Message(i, o, content);
 			messages.add(c);
 		}

@@ -2,10 +2,10 @@
 default: dvrouter.class lsrouter.class
 
 dvrouter.class: dvrouter.java
-     javac dvrouter.java
+	javac dvrouter.java
 
 lsrouter.class: lsrouter.java
-     javac lsrouter.java
+	javac lsrouter.java
 
 clean: 
-     rm -rf *.class
+	rm -rf *.class
