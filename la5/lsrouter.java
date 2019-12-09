@@ -1,118 +1,106 @@
 //
-//  lsrouter.java
+//  dvrouter.java
 //  
 //
-//  Created by Carrie E. Adkins and Tyler J. Barrett on 11/30/19.
+//  Created by Carrie E. Adkins an Tyler J. Barrett on 11/30/19.
 //
 
 
 import java.util.*;
+import java.lang.*;
 import java.io.*;
 
-public class lsrouter {
-	private int distance [];
-	private Set<Integer> settled;
-	private PriorityQueue<Node> pq;
-	private int Vert;
-	List<List<Node> > adj;
+class lsrouter {
 
-	public lsrouter(int Vert) {
-		this.Vert = Vert;
-		distance = new int[Vert];
-		settled = new HashSet<Integer>();
-		pq = new PriorityQueue<Node>(Vert, new Node());
-	}
 
-	//Dijkastra's Algorithm
+	// Shortest Distance from source to other nodes
 
-	public void dijkstra(List<List<Node > adj, int src) {
-
-		this.adj = adj;
-
-		for(int i = 0; i < Vert; i++){
-			distance[i] = Integer.MAX_VALUE;
-		}
-
-		//source node
-
-		pq.add(new Node (src, 0));
-
-		//Distance to the source 0
-
-		distance[src] = 0;
-		while (settled.size() != Vert){
-
-			//min distance node reomved
-
-			int u = pq.remove().node;
-
-			////adding final distance node
-
-			settled.add(u);
-
-			e_Neighbours(u);
-		}
-	}
-
-	//Process the neighbours
-
-	private void e_Neighbours(int u) {
+	public static int[] BellmanFord(Graph graph, String [][] hops, int source){
 		
-		int edgeDistance = -1;
-		int newDistance = -1;
+		int V = graph.V;
+		int E = graph.E;
+		int distance[] = new int[V];
 
-		//Neighbours of Vert
+		// Initialize distance from source to all other node as infinity
 
-		for (int i = 0; i < adj.get(u).size(); i++){
-			Node v = adj.get(u).get(i);
+		for(int i = 0; i < V; ++i)
+			distance[i] = Integer.MAX_VALUE;
+		distance[source] = 0;
 
-			//Current node has not been processed
+		// shortest path no more than V -1 edges
+		for( int i =1; i <V; ++i){
+		for (int j = 1; j < E; ++j) {
+			int u = graph.edge[j].source;
+			int v = graph.edge[j].destination;
+			int weight = graph.edge[j].weight;
 
-			if(!settled.contains(v.node)) {
-
-				edgeDistance = v.cost;
-				newDistance = distance[u] + edgeDistance;
-
-				// New Distance better than cost
-				if (newDistance < distance[v.node]){
-					distance[v.node] = newDistance;
-				}
-
-				// Add current node to queue
-
-				pq.add(new Node(v.node, distance[v.node]));
+			if (destination[u] != Integer.MAX_VALUE && distance[u] + weight < distance[v] && weight >= 0){
+				distance[v] = distance[u] + weight;
+				hops[src][v]=hops[source][u] + (v+1) +" ";
 			}
-
 		}
 	}
-	public static void main(String arg[]) {
+	return distance;
+}
 
+public static void hopsClear(String [][]hops, int V) {
+	for(int i = 0; i<V; ++i) {
+		for( int j = 0; j <V; ++j){
+			hops[i][j] ="";
+		}
 	}
 }
-	
 
-	// Node in graph
-
-	class Node implements Comparator<Node> {
-		public in node;
-		public int cost;
-
-		public Node(){
-
-		}
-
-		public Node(int node, int cost){
-			this.node = node;
-			this.cost = cost;
-		}
-
-		@Override
-		public int compare(Node node1, Node node2){
-
-			if(node1.cost < node2.cost)
-				return -1;
-			if(node1.cost > node2.cost)
-				return 1;
-			return 0;
-		}
+public static String routerTable(int [][] table, int V, String [][]hops){
+	String ret = "";
+	for(int i = 0; i < V; ++i){
+		ret += "Forwarding table for router " + (i+1) + "\n";
+		for(int j = 0; j <V; ++j){
+			if (i == j){
+				ret += (i+1) +" "+(j+1)+" "+table[i][j]+"\n";
+			}
+			else {
+				ret += (i+1) +" "+ hops[i][j].substring(0,1)+" "table[i][j]+"\n";
+			}
+		} 
 	}
+	return ret;
+}
+
+public static void printTable(int [][]table, int V){
+	
+	System.out.println("Forwardding table");
+
+	for(int i = 0; i < V; ++i){
+		for(int j = 0; j < V; ++j){
+			System.out.print(table[i][j] + " ");
+		}
+
+		System.out.println();
+	}
+
+}
+
+public static String sendingMsg(String [][]hops, Message m){
+
+	String ret = "";
+	for(int i = 0; i < m.messages.size(); ++i){
+		ret += "From " + (m.messages.get(i).out+1) + " to "+(m.messages.get(i).in+1)+" Hops: "+ hops[m.messages.get(i).out][m.messages.get(i).in]+" Message: "+ m.messages.get(i).message + "\n";
+	}
+	return ret;
+}
+
+public static void Output(String output) {
+
+	try {
+		FileWriter name = new FileWriter("output.txt");
+		PrintWriter print = new PrintWriter(name);
+		print.print(output);
+		print.close();
+	}
+	catch (Exception e){
+		System.out.println(e);
+	}
+}
+}
+
