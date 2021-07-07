@@ -1,0 +1,41 @@
+
+import java.util.*;
+
+public class StudentClientStrategy implements ClientStrategy{
+    ArrayList<String> file;
+
+
+    public StudentClientStrategy(){
+        reset();
+    }
+
+    public void reset(){
+        file = new ArrayList<String>();
+    }
+
+    public List<String> getFile(){
+        return file;
+    }
+
+    public List<Message> sendRcv(List<Message> serverMsgs){
+		for (Message m : serverMsgs) {
+			while (file.size() < m.num+1) file.add(null);
+			file.set(m.num,m.msg);
+			System.out.println(m.num+","+m.msg);
+		}
+		List<Message> ack = new ArrayList<Message>();
+		for(Message m: serverMsgs){
+
+		Message s = new Message(m.num,"ACK");
+		
+		
+		ack.add(s);
+		}
+		return ack;
+
+
+    }
+
+}
+
+
